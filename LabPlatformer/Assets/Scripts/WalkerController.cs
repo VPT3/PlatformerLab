@@ -6,7 +6,6 @@ public class WalkerController : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private InputAction moveAction;
-
     private float moveInput;
 
     [Header("Movement")]
@@ -41,13 +40,11 @@ public class WalkerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
-        bool wasGrounded = isGrounded;
         isGrounded = Physics2D.OverlapCircle(
             groundCheck.position, groundCheckRadius, groundLayer) != null;
-        if (isGrounded != wasGrounded) Debug.Log($"isGrounded -> {isGrounded}");
-    }
 
+        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+    }
     void OnDrawGizmosSelected()
     {
         if (groundCheck == null) return;
