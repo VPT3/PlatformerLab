@@ -19,6 +19,7 @@ public class WalkerController : MonoBehaviour
 
     private InputAction jumpAction;
     private bool jumpRequested;
+    private bool jumpCutRequested;
     private bool isGrounded;
 
     void Awake()
@@ -41,10 +42,15 @@ public class WalkerController : MonoBehaviour
         {
             jumpRequested = true;
         }
+
+        if (jumpAction.WasReleasedThisFrame())
+        {
+            jumpCutRequested = true;
+        }
     }
 
     void FixedUpdate()
-    {
+    {  
         isGrounded = Physics2D.OverlapCircle(
             groundCheck.position, groundCheckRadius, groundLayer) != null;
 
@@ -55,8 +61,16 @@ public class WalkerController : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpVelocity);
         }
 
+        if (jumpCutRequested && rb.linearVelocity.y > 0f)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+        }
+
         jumpRequested = false;
+        jumpCutRequested = false;
+
     }
+
     void OnDrawGizmosSelected()
     {
         if (groundCheck == null) return;
